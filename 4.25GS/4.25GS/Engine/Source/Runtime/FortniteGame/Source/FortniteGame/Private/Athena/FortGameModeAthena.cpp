@@ -33,13 +33,17 @@ bool ReadyToStartMatchHook(AFortGameModeAthena* GameMode)
 	if (!bPrepared)
 	{
 		bPrepared = true;
+		Log("Warmup spots found");
 
 		ApplyPlaylist();
+		Log("Playlist applied");
 
 		if (StartListening(CurrentWorld()))
 			Log("Listening");
 		else
 			Log("Failed to start listening");
+
+		Log("Listen setup finished");
 
 		GameMode->WarmupRequiredPlayerCount = Config::WarmupRequiredPlayers;
 

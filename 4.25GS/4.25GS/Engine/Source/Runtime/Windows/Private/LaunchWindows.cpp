@@ -35,13 +35,25 @@ static DWORD WINAPI Main(LPVOID)
 	SetConsoleTitleA("4.25 Gameserver");
 
 	MH_Initialize();
+	Log("MinHook ready");
+
 	InitGObjects();
+	Log("GObjects ready");
 
 	InstallDetours();
+	Log("Detours installed");
+
 	LoadStartupMap();
+	Log("Startup map requested");
+
 	DisableEngineFunctions();
+	Log("Engine functions disabled");
+
 	InstallVirtualHooks();
+	Log("Virtual hooks installed");
+
 	InstallTickHook();
+	Log("Tick hook installed");
 
 	return 0;
 }

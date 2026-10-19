@@ -2,6 +2,8 @@
 
 APawn* SpawnDefaultPawnForHook(AGameModeBase* GameMode, AController* NewPlayer, AActor* StartSpot)
 {
+	Log("SpawnDefaultPawnFor");
+
 	static auto* PawnClass = FindObject<UClass>(Config::PawnClass);
 
 	if (!PawnClass || !StartSpot)
@@ -23,6 +25,8 @@ APawn* SpawnDefaultPawnForHook(AGameModeBase* GameMode, AController* NewPlayer, 
 
 void HandleStartingNewPlayerHook(AFortGameModeAthena* GameMode, AFortPlayerControllerAthena* NewPlayer)
 {
+	Log("HandleStartingNewPlayer");
+
 	auto* State = reinterpret_cast<AFortPlayerStateAthena*>(NewPlayer->PlayerState);
 
 	NewPlayer->bHasServerFinishedLoading = true;
