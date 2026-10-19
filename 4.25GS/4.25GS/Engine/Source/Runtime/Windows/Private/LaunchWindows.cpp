@@ -1,5 +1,21 @@
 #include "pch.h"
 
+static LONG WINAPI CrashLogger(EXCEPTION_POINTERS* Info)
+{
+	const DWORD Code = Info->ExceptionRecord->ExceptionCode;
+
+	if (Code == EXCEPTION_ACCESS_VIOLATION || Code == EXCEPTION_ILLEGAL_INSTRUCTION || Code == EXCEPTION_STACK_OVERFLOW)
+	{
+		const auto Address = reinterpret_cast<uintptr_t>(Info->ExceptionRecord->ExceptionAddress);
+
+		char Line[256];
+		sprintf_s(Line, "Exception 0x%08lX at 0x%llX (image base + 0x%llX)", Code, static_cast<unsigned long long>(Address), static_cast<unsigned long long>(Address - ImageBase()));
+		Log(Line);
+	}
+
+	return EXCEPTION_CONTINUE_SEARCH;
+}
+
 static void InstallDetours()
 {
 	InstallDetour(Offsets::GetNetModeWorld, GetNetModeWorldHook);
@@ -33,6 +49,9 @@ static DWORD WINAPI Main(LPVOID)
 	freopen_s(&Console, "CONOUT$", "w+", stdout);
 
 	SetConsoleTitleA("4.25 Gameserver");
+
+	AddVectoredExceptionHandler(1, CrashLogger);
+	Log("GS started");
 
 	MH_Initialize();
 	Log("MinHook ready");

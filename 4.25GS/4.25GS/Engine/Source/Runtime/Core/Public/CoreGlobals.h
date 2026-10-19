@@ -14,4 +14,12 @@ inline Fn Resolve(uintptr_t Offset)
 inline void Log(const char* Message)
 {
 	std::cout << Message << std::endl;
+
+	FILE* File = nullptr;
+
+	if (fopen_s(&File, "GS.log", "a") == 0 && File)
+	{
+		fprintf(File, "%s\n", Message);
+		fclose(File);
+	}
 }
