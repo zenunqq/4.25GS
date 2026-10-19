@@ -5,6 +5,10 @@ static void InstallDetours()
 	InstallDetour(Offsets::GetNetModeWorld, GetNetModeWorldHook);
 	InstallDetour(Offsets::GetNetModeActor, GetNetModeActorHook);
 	InstallDetour(Offsets::KickPlayer, KickPlayerHook, &KickPlayerOriginal);
+}
+
+static void InstallTickHook()
+{
 	InstallDetour(Offsets::TickFlush, TickFlushHook, &TickFlushOriginal);
 }
 
@@ -37,6 +41,7 @@ static DWORD WINAPI Main(LPVOID)
 	LoadStartupMap();
 	DisableEngineFunctions();
 	InstallVirtualHooks();
+	InstallTickHook();
 
 	return 0;
 }
