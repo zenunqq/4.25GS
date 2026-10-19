@@ -4,11 +4,17 @@ template <typename Hook, typename Original = void*>
 inline bool InstallDetour(uintptr_t Offset, Hook Detour, Original* OutOriginal = nullptr)
 {
 	void* Target = reinterpret_cast<void*>(ImageBase() + Offset);
+	char Line[160];
 
-	if (MH_CreateHook(Target, reinterpret_cast<void*>(Detour), reinterpret_cast<void**>(OutOriginal)) != MH_OK)
-		return false;
+	MH_STATUS Status = MH_CreateHook(Target, reinterpret_cast<void*>(Detour), reinterpret_cast<void**>(OutOriginal));
 
-	return MH_EnableHook(Target) == MH_OK;
+	if (Status == MH_OK)
+		Status = MH_EnableHook(Target);
+
+	sprintf_s(Line, "Detour at image base + 0x%llX: %s", static_cast<unsigned long long>(Offset), MH_StatusToString(Status));
+	Log(Line);
+
+	return Status == MH_OK;
 }
 
 template <typename Hook, typename Original = void*>
