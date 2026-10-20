@@ -71,7 +71,7 @@ static DWORD WINAPI Main(LPVOID)
 	FILE* Console = nullptr;
 	freopen_s(&Console, "CONOUT$", "w+", stdout);
 
-	SetConsoleTitleA("4.25 Gameserver");
+	SetConsoleTitleA("4.5 Gameserver");
 
 	AddVectoredExceptionHandler(1, CrashLogger);
 	Log("GS started");
