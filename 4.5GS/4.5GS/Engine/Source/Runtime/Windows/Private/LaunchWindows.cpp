@@ -86,8 +86,22 @@ static DWORD WINAPI Main(LPVOID)
 
 	if (!ObjectArrayLooksValid())
 	{
-		Log("GObjects offset does not match this build, stopping");
-		return 0;
+		Log("SDK GObjects offset is invalid, scanning for the object array");
+
+		TUObjectArray* Found = ScanForObjectArray();
+
+		if (!Found)
+		{
+			Log("Object array not found, stopping");
+			return 0;
+		}
+
+		char Line[160];
+		sprintf_s(Line, "Object array found at image base + 0x%llX", static_cast<unsigned long long>(reinterpret_cast<uintptr_t>(Found) - ImageBase()));
+		Log(Line);
+
+		UObject::GObjects = Found;
+		LogObjectArray();
 	}
 
 	Log("GObjects ready");
