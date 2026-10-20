@@ -79,7 +79,17 @@ static DWORD WINAPI Main(LPVOID)
 	MH_Initialize();
 	Log("MinHook ready");
 
+	LogBuildFingerprint();
+
 	InitGObjects();
+	LogObjectArray();
+
+	if (!ObjectArrayLooksValid())
+	{
+		Log("GObjects offset does not match this build, stopping");
+		return 0;
+	}
+
 	Log("GObjects ready");
 
 	InstallDetours();
